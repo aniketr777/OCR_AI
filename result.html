@@ -2,6 +2,7 @@
 <html lang="en">
 
 
+
 <head>
     <meta charset="UTF-8" />
     <title>AI & OCR Studio</title>
@@ -31,9 +32,11 @@
             --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
         }
 
+
         * {
             box-sizing: border-box;
         }
+
 
         @keyframes spin {
             to {
@@ -41,17 +44,21 @@
             }
         }
 
+
         @keyframes pulse {
+
 
             0%,
             100% {
                 opacity: 1;
             }
 
+
             50% {
                 opacity: 0.5;
             }
         }
+
 
         @keyframes slideUp {
             from {
@@ -59,55 +66,67 @@
                 transform: translateY(20px);
             }
 
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
             }
+
 
             to {
                 opacity: 1;
             }
         }
 
+
         @keyframes shimmer {
             0% {
                 background-position: -200px 0;
             }
+
 
             100% {
                 background-position: calc(200px + 100%) 0;
             }
         }
 
+
         @keyframes float {
+
 
             0%,
             100% {
                 transform: translateY(0px);
             }
 
+
             50% {
                 transform: translateY(-10px);
             }
         }
 
+
         @keyframes logoGlow {
+
 
             0%,
             100% {
                 filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.3));
             }
 
+
             50% {
                 filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
             }
         }
+
 
         .spinner {
             width: 20px;
@@ -118,12 +137,14 @@
             animation: spin 1s linear infinite;
         }
 
+
         html,
         body {
             height: 100%;
             overflow: hidden;
             /* Prevent page scrolling */
         }
+
 
         body {
             background: var(--bg-primary);
@@ -137,12 +158,14 @@
             line-height: 1.6;
         }
 
+
         .app-layout {
             display: flex;
             flex-direction: column;
             height: 100vh;
             animation: fadeIn 0.8s ease-out;
         }
+
 
         .app-header {
             background: rgba(255, 255, 255, 0.02);
@@ -156,11 +179,13 @@
             z-index: 100;
         }
 
+
         .logo-container {
             display: flex;
             align-items: center;
             gap: 16px;
         }
+
 
         .logo {
             width: 48px;
@@ -168,10 +193,12 @@
             animation: logoGlow 3s ease-in-out infinite;
         }
 
+
         .brand-text {
             display: flex;
             flex-direction: column;
         }
+
 
         .brand-title {
             font-size: 1.5rem;
@@ -184,6 +211,7 @@
             letter-spacing: -0.02em;
         }
 
+
         .brand-subtitle {
             font-size: 0.75rem;
             color: var(--text-secondary);
@@ -193,11 +221,13 @@
             text-transform: uppercase;
         }
 
+
         .header-actions {
             display: flex;
             align-items: center;
             gap: 12px;
         }
+
 
         .status-badge {
             display: flex;
@@ -212,6 +242,7 @@
             font-weight: 500;
         }
 
+
         .status-dot {
             width: 8px;
             height: 8px;
@@ -219,6 +250,7 @@
             background: var(--success);
             animation: pulse 2s infinite;
         }
+
 
         .main-content {
             flex: 1;
@@ -233,6 +265,7 @@
             overflow: hidden;
         }
 
+
         .left-panel {
             flex: 1;
             min-width: 400px;
@@ -243,6 +276,7 @@
             overflow-y: auto;
         }
 
+
         .right-panel {
             flex: 1.5;
             min-width: 500px;
@@ -251,17 +285,20 @@
             height: 100%;
         }
 
+
         .section {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
+
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
 
         .section-label {
             font-size: 1.1rem;
@@ -271,6 +308,7 @@
             align-items: center;
             gap: 12px;
         }
+
 
         .section-icon {
             width: 24px;
@@ -284,6 +322,7 @@
             animation: float 3s ease-in-out infinite;
         }
 
+
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -296,6 +335,7 @@
             overflow: hidden;
         }
 
+
         .glass-card::before {
             content: '';
             position: absolute;
@@ -307,12 +347,14 @@
             opacity: 0.5;
         }
 
+
         .glass-card:hover {
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.15);
             box-shadow: var(--shadow-xl);
             transform: translateY(-2px);
         }
+
 
         .ocr-box {
             min-height: 200px;
@@ -331,6 +373,7 @@
             font-family: 'SF Mono', 'Monaco', monospace;
         }
 
+
         .ocr-box.has-content {
             justify-content: flex-start;
             align-items: flex-start;
@@ -338,11 +381,13 @@
             font-family: 'Inter', sans-serif;
         }
 
+
         .chat-container {
             height: 100%;
             display: flex;
             flex-direction: column;
         }
+
 
         .chat-glass-card {
             background: var(--glass-bg);
@@ -357,6 +402,7 @@
             flex-direction: column;
         }
 
+
         .chat-glass-card::before {
             content: '';
             position: absolute;
@@ -368,10 +414,12 @@
             opacity: 0.5;
         }
 
+
         .chat-header {
             padding: 28px 28px 20px 28px;
             flex-shrink: 0;
         }
+
 
         .chat-area {
             flex: 1;
@@ -384,6 +432,7 @@
             /* Important for flex scrolling */
         }
 
+
         .chat-footer {
             padding: 20px 28px 28px 28px;
             flex-shrink: 0;
@@ -391,19 +440,23 @@
             background: rgba(0, 0, 0, 0.1);
         }
 
+
         .msg {
             display: flex;
             max-width: 80%;
             animation: slideUp 0.4s ease-out;
         }
 
+
         .msg.user {
             align-self: flex-end;
         }
 
+
         .msg.ai {
             align-self: flex-start;
         }
+
 
         .msg-bubble {
             padding: 20px 24px;
@@ -417,11 +470,13 @@
             position: relative;
         }
 
+
         .msg.user .msg-bubble {
             background: var(--accent-gradient);
             border-bottom-right-radius: 8px;
             color: white;
         }
+
 
         .msg.ai .msg-bubble {
             background: rgba(255, 255, 255, 0.08);
@@ -429,10 +484,12 @@
             border-bottom-left-radius: 8px;
         }
 
+
         .msg-bubble:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
+
 
         .msg-text {
             margin: 0;
@@ -442,15 +499,18 @@
             line-height: 1.6;
         }
 
+
         .msg-text strong {
             font-weight: 600;
             color: var(--accent-secondary);
         }
 
+
         .code-container {
             position: relative;
             margin: 8px 0;
         }
+
 
         .msg-code {
             background: rgba(0, 0, 0, 0.6);
@@ -468,6 +528,7 @@
             /* Make room for copy button */
         }
 
+
         .msg-code::before {
             content: '';
             position: absolute;
@@ -477,6 +538,7 @@
             height: 2px;
             background: var(--accent-gradient);
         }
+
 
         .code-copy-btn {
             position: absolute;
@@ -494,11 +556,13 @@
             z-index: 10;
         }
 
+
         .code-copy-btn:hover {
             background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.3);
             color: var(--text-primary);
         }
+
 
         .code-copy-btn.copied {
             background: var(--success);
@@ -506,16 +570,19 @@
             color: white;
         }
 
+
         .chat-form {
             display: flex;
             gap: 16px;
             align-items: flex-end;
         }
 
+
         .input-container {
             flex-grow: 1;
             position: relative;
         }
+
 
         .chat-input {
             width: 100%;
@@ -533,6 +600,7 @@
             max-height: 120px;
         }
 
+
         .chat-input:focus {
             outline: none;
             border-color: var(--accent-primary);
@@ -540,9 +608,11 @@
             background: rgba(255, 255, 255, 0.08);
         }
 
+
         .chat-input::placeholder {
             color: var(--text-muted);
         }
+
 
         .btn {
             background: var(--accent-gradient);
@@ -561,14 +631,17 @@
             backdrop-filter: blur(10px);
         }
 
+
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-lg), var(--shadow-glow);
         }
 
+
         .btn:active {
             transform: translateY(-1px);
         }
+
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
@@ -577,15 +650,18 @@
             font-size: 0.9rem;
         }
 
+
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.3);
         }
 
+
         .send-btn {
             min-height: 60px;
             padding: 0 28px;
         }
+
 
         .loading-state {
             display: flex;
@@ -595,10 +671,12 @@
             font-size: 0.95rem;
         }
 
+
         .copy-success {
             background: var(--success) !important;
             transform: scale(0.95);
         }
+
 
         .stats-grid {
             display: grid;
@@ -606,6 +684,7 @@
             gap: 16px;
             margin-top: 16px;
         }
+
 
         .stat-item {
             text-align: center;
@@ -615,6 +694,7 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
+
         .stat-value {
             font-size: 1.5rem;
             font-weight: 700;
@@ -622,11 +702,13 @@
             margin: 0;
         }
 
+
         .stat-label {
             font-size: 0.8rem;
             color: var(--text-secondary);
             margin: 4px 0 0 0;
         }
+
 
         /* Responsive Design */
         @media (max-width: 1200px) {
@@ -636,6 +718,7 @@
                 overflow-y: auto;
             }
 
+
             .left-panel,
             .right-panel {
                 min-width: unset;
@@ -644,10 +727,12 @@
                 /* Allow content to flow */
             }
 
+
             .chat-container {
                 height: 60vh;
                 min-height: 400px;
             }
+
 
             html,
             body {
@@ -655,84 +740,101 @@
             }
         }
 
+
         @media (max-width: 768px) {
             .app-header {
                 padding: 16px 20px;
             }
+
 
             .logo {
                 width: 40px;
                 height: 40px;
             }
 
+
             .brand-title {
                 font-size: 1.25rem;
             }
+
 
             .main-content {
                 padding: 20px;
                 gap: 20px;
             }
 
+
             .glass-card,
             .chat-glass-card {
                 padding: 20px;
             }
+
 
             .chat-header,
             .chat-footer {
                 padding: 20px;
             }
 
+
             .chat-area {
                 padding: 0 20px 20px 20px;
-                overflow-y: hidden;
-                /* --- MODIFICATION: Disabled scrolling on small screens --- */
+                overflow-y: auto;
+                /* --- FIX: Re-enabled scrolling on small screens --- */
             }
 
+
             .ocr-box {
-                overflow-y: hidden;
-                /* --- MODIFICATION: Disabled scrolling on small screens --- */
+                overflow-y: auto;
+                /* --- FIX: Re-enabled scrolling on small screens --- */
             }
+
 
             .msg {
                 max-width: 90%;
             }
+
 
             .chat-form {
                 flex-direction: column;
                 gap: 12px;
             }
 
+
             .send-btn {
                 align-self: stretch;
             }
+
 
             .header-actions {
                 display: none;
             }
         }
 
+
         /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
+
 
         ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 4px;
         }
 
+
         ::-webkit-scrollbar-thumb {
             background: var(--accent-primary);
             border-radius: 4px;
         }
+
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-secondary);
         }
     </style>
 </head>
+
 
 <body>
     <div class="app-layout">
@@ -750,12 +852,14 @@
                     <circle cx="24" cy="24" r="20" fill="url(#logoGradient)" opacity="0.2" />
                     <circle cx="24" cy="24" r="16" fill="none" stroke="url(#logoGradient)" stroke-width="2" />
 
+
                     <!-- Neural Network Nodes -->
                     <circle cx="18" cy="18" r="2" fill="url(#logoGradient)" />
                     <circle cx="30" cy="18" r="2" fill="url(#logoGradient)" />
                     <circle cx="24" cy="24" r="2" fill="url(#logoGradient)" />
                     <circle cx="18" cy="30" r="2" fill="url(#logoGradient)" />
                     <circle cx="30" cy="30" r="2" fill="url(#logoGradient)" />
+
 
                     <!-- Neural Connections -->
                     <line x1="18" y1="18" x2="24" y2="24" stroke="url(#logoGradient)" stroke-width="1.5"
@@ -769,6 +873,7 @@
                     <line x1="18" y1="18" x2="30" y2="30" stroke="url(#logoGradient)" stroke-width="1" opacity="0.4" />
                     <line x1="30" y1="18" x2="18" y2="30" stroke="url(#logoGradient)" stroke-width="1" opacity="0.4" />
 
+
                     <!-- OCR Document Icon -->
                     <rect x="12" y="8" width="8" height="10" rx="1" fill="none" stroke="url(#logoGradient)"
                         stroke-width="1.5" opacity="0.8" />
@@ -777,11 +882,13 @@
                     <line x1="14" y1="15" x2="16" y2="15" stroke="url(#logoGradient)" stroke-width="1" opacity="0.6" />
                 </svg>
 
+
                 <div class="brand-text">
                     <h1 class="brand-title">AI & OCR Studio</h1>
                     <p class="brand-subtitle">Intelligent Text Processing</p>
                 </div>
             </div>
+
 
             <div class="header-actions">
                 <div class="status-badge" id="statusBadge" style="display: none;">
@@ -790,6 +897,7 @@
                 </div>
             </div>
         </header>
+
 
         <!-- Main Content -->
         <main class="main-content">
@@ -807,12 +915,14 @@
                             </button>
                         </div>
 
+
                         <div class="ocr-box" id="ocrText">
                             <div class="loading-state">
                                 <div class="spinner"></div>
                                 <span>Processing image with OCR...</span>
                             </div>
                         </div>
+
 
                         <div class="stats-grid" id="ocrStats" style="display: none;">
                             <div class="stat-item">
@@ -832,6 +942,7 @@
                 </div>
             </div>
 
+
             <!-- Right Panel - AI Chat Section -->
             <div class="right-panel">
                 <div class="section chat-container">
@@ -845,6 +956,7 @@
                             </div>
                         </div>
 
+
                         <div class="chat-area" id="chatHistory">
                             <div id="initial-ai-response" class="msg ai">
                                 <div class="msg-bubble">
@@ -855,6 +967,7 @@
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="chat-footer">
                             <form id="chatForm" class="chat-form" autocomplete="off" style="display: none;">
@@ -875,6 +988,7 @@
         </main>
     </div>
 
+
     <script>
         const { ipcRenderer } = require('electron');
         const ocrBox = document.getElementById('ocrText');
@@ -886,14 +1000,17 @@
         const initialAiResponseContainer = document.getElementById('initial-ai-response');
         const statusBadge = document.getElementById('statusBadge');
 
+
         let conversation = [];
         let fullOcrText = '';
+
 
         // Auto-resize textarea
         chatInput.addEventListener('input', function () {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 120) + 'px';
         });
+
 
         // Handle Enter key in textarea
         chatInput.addEventListener('keydown', function (e) {
@@ -903,20 +1020,24 @@
             }
         });
 
+
         function updateStats(text) {
             const charCount = text.length;
             const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
             const lineCount = text.split('\n').length;
+
 
             document.getElementById('charCount').textContent = charCount.toLocaleString();
             document.getElementById('wordCount').textContent = wordCount.toLocaleString();
             document.getElementById('lineCount').textContent = lineCount.toLocaleString();
         }
 
+
         function createCodeCopyButton(codeText) {
             const copyBtn = document.createElement('button');
             copyBtn.className = 'code-copy-btn';
             copyBtn.textContent = '📋 Copy';
+
 
             copyBtn.addEventListener('click', async () => {
                 try {
@@ -924,6 +1045,7 @@
                     const originalText = copyBtn.textContent;
                     copyBtn.textContent = '✅ Copied!';
                     copyBtn.classList.add('copied');
+
 
                     setTimeout(() => {
                         copyBtn.textContent = originalText;
@@ -934,8 +1056,10 @@
                 }
             });
 
+
             return copyBtn;
         }
+
 
         ipcRenderer.on('ocr-ready', (event, { ocrText }) => {
             fullOcrText = ocrText;
@@ -946,14 +1070,17 @@
             ocrStats.style.display = 'grid';
             statusBadge.style.display = 'flex';
 
+
             updateStats(ocrText);
         });
+
 
         ipcRenderer.on('ai-ready', (event, { aiText, ocrText }) => {
             initialAiResponseContainer.innerHTML = '';
             appendMsg('ai', aiText, initialAiResponseContainer);
             chatForm.style.display = 'flex';
             chatInput.focus();
+
 
             conversation = [
                 { role: "system", content: `You are an expert assistant. CRITICAL RULE: You MUST wrap any and all code blocks in markdown triple backticks (e.g., \`\`\`python ... \`\`\`). Do not write any code outside of these backticks. Use this text as context: """${ocrText}"""` },
@@ -971,9 +1098,8 @@
             if (who === 'user') {
                 bubble.textContent = txt;
             } else {
-                // This is the corrected line
+                // Corrected this block to properly split the string by '```
                 const parts = txt.split('```');
-
                 parts.forEach((part, index) => {
                     // This handles empty strings that can result from splitting
                     if (!part.trim()) return;
@@ -1008,7 +1134,6 @@
                 });
             }
 
-
             msgContainer.appendChild(bubble);
             parentElement.appendChild(msgContainer);
 
@@ -1016,14 +1141,17 @@
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
 
+
         chatForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const userText = chatInput.value.trim();
             if (!userText) return;
 
+
             appendMsg('user', userText);
             chatInput.value = '';
             chatInput.style.height = 'auto';
+
 
             // Add loading message
             const loadingMsg = document.createElement('div');
@@ -1039,7 +1167,9 @@
             chatHistory.appendChild(loadingMsg);
             chatHistory.scrollTop = chatHistory.scrollHeight;
 
+
             conversation.push({ role: 'user', content: userText });
+
 
             try {
                 const aiReply = await ipcRenderer.invoke('chat-with-llm', conversation);
@@ -1052,12 +1182,14 @@
             }
         });
 
+
         copyOcrBtn.addEventListener('click', async () => {
             try {
                 await navigator.clipboard.writeText(fullOcrText);
                 const originalText = copyOcrBtn.innerHTML;
                 copyOcrBtn.innerHTML = "✅ Copied!";
                 copyOcrBtn.classList.add('copy-success');
+
 
                 setTimeout(() => {
                     copyOcrBtn.innerHTML = originalText;
@@ -1069,5 +1201,6 @@
         });
     </script>
 </body>
+
 
 </html>
