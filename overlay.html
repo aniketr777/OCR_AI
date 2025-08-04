@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Screen Capture Overlay</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        const { ipcRenderer } = require('electron');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let isSelecting = false;
+        let captureTriggered = false; // Flag to prevent double captures
+        let startX, startY, currentX, currentY;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            drawOverlay();
+        }
+
+        function drawOverlay() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawSelectionRect() {
+            const x = Math.min(startX, currentX);
+            const y = Math.min(startY, currentY);
+            const width = Math.abs(currentX - startX);
+            const height = Math.abs(currentY - startY);
+
+            drawOverlay();
+            ctx.clearRect(x, y, width, height); // Punch a hole in the overlay
+            ctx.strokeStyle = '#3399ff';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 3]);
+            ctx.strokeRect(x, y, width, height);
+
+            return { x, y, width, height };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (captureTriggered) return;
+            startX = e.clientX;
+            startY = e.clientY;
+            isSelecting = true;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isSelecting) return;
+            currentX = e.clientX;
+            currentY = e.clientY;
+            drawSelectionRect();
+        });
+
+        canvas.addEventListener('mouseup', async (e) => {
+            // **FIX**: Ensure this block runs only once
+            if (!isSelecting || captureTriggered) {
+                return;
+            }
+            captureTriggered = true;
+            isSelecting = false;
+
+            const rect = drawSelectionRect();
+
+            // **FIX**: Make the overlay instantly invisible for better UX
+            document.body.style.opacity = '0';
+
+            // Send capture command to main process
+            await ipcRenderer.invoke('capture-region', rect);
+
+            // The main process will handle closing this window.
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                window.close();
+            }
+        });
+
+        resizeCanvas();
+    </script>
+</body>
+
+</html>

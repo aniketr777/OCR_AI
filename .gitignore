@@ -1,0 +1,20 @@
+# Secret environment variables
+.env
+
+# Language data for OCR (if you download it locally)
+*.traineddata
+
+# Dependencies
+node_modules/
+
+# It is highly recommended to commit package.json and package-lock.json
+# Do NOT add them to .gitignore
+
+# Optional: Build artifacts or temporary files
+dist/
+build/
+*.log
+data/
+
+out/
+forge.config.js

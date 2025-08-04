@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8" />
+    <title>AI & OCR Studio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #1a1a2e;
+            --bg-tertiary: #16213e;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a9c0;
+            --text-muted: #6b7280;
+            --accent-primary: #8b5cf6;
+            --accent-secondary: #06b6d4;
+            --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes logoGlow {
+
+            0%,
+            100% {
+                filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.3));
+            }
+
+            50% {
+                filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
+            }
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            /* Prevent page scrolling */
+        }
+
+        body {
+            background: var(--bg-primary);
+            background-image:
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            margin: 0;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .app-layout {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .app-header {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 20px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin: 0;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            gap: 32px;
+            padding: 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%;
+            height: calc(100vh - 88px);
+            /* Subtract header height */
+            overflow: hidden;
+        }
+
+        .left-panel {
+            flex: 1;
+            min-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            flex: 1.5;
+            min-width: 500px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-gradient);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--accent-gradient);
+            opacity: 0.5;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-2px);
+        }
+
+        .ocr-box {
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            transition: all 0.3s ease;
+            font-family: 'SF Mono', 'Monaco', monospace;
+        }
+
+        .ocr-box.has-content {
+            justify-content: flex-start;
+            align-items: flex-start;
+            background: rgba(0, 0, 0, 0.3);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--accent-gradient);
+            opacity: 0.5;
+        }
+
+        .chat-header {
+            padding: 28px 28px 20px 28px;
+            flex-shrink: 0;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 0 28px 20px 28px;
+            min-height: 0;
+            /* Important for flex scrolling */
+        }
+
+        .chat-footer {
+            padding: 20px 28px 28px 28px;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .msg {
+            display: flex;
+            max-width: 80%;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .msg.user {
+            align-self: flex-end;
+        }
+
+        .msg.ai {
+            align-self: flex-start;
+        }
+
+        .msg-bubble {
+            padding: 20px 24px;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .msg.user .msg-bubble {
+            background: var(--accent-gradient);
+            border-bottom-right-radius: 8px;
+            color: white;
+        }
+
+        .msg.ai .msg-bubble {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom-left-radius: 8px;
+        }
+
+        .msg-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .msg-text {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .msg-text strong {
+            font-weight: 600;
+            color: var(--accent-secondary);
+        }
+
+        .code-container {
+            position: relative;
+            margin: 8px 0;
+        }
+
+        .msg-code {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-x: auto;
+            position: relative;
+            padding-top: 45px;
+            /* Make room for copy button */
+        }
+
+        .msg-code::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+        }
+
+        .code-copy-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .code-copy-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+        }
+
+        .code-copy-btn.copied {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .chat-form {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+        }
+
+        .input-container {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 24px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            resize: none;
+            min-height: 60px;
+            max-height: 120px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 28px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 20px;
+            font-size: 0.9rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .send-btn {
+            min-height: 60px;
+            padding: 0 28px;
+        }
+
+        .loading-state {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .copy-success {
+            background: var(--success) !important;
+            transform: scale(0.95);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 0;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin: 4px 0 0 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-content {
+                flex-direction: column;
+                gap: 24px;
+                overflow-y: auto;
+            }
+
+            .left-panel,
+            .right-panel {
+                min-width: unset;
+                height: auto;
+                overflow-y: visible;
+                /* Allow content to flow */
+            }
+
+            .chat-container {
+                height: 60vh;
+                min-height: 400px;
+            }
+
+            html,
+            body {
+                overflow: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-header {
+                padding: 16px 20px;
+            }
+
+            .logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .brand-title {
+                font-size: 1.25rem;
+            }
+
+            .main-content {
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .glass-card,
+            .chat-glass-card {
+                padding: 20px;
+            }
+
+            .chat-header,
+            .chat-footer {
+                padding: 20px;
+            }
+
+            .chat-area {
+                padding: 0 20px 20px 20px;
+                overflow-y: hidden;
+                /* --- MODIFICATION: Disabled scrolling on small screens --- */
+            }
+
+            .ocr-box {
+                overflow-y: hidden;
+                /* --- MODIFICATION: Disabled scrolling on small screens --- */
+            }
+
+            .msg {
+                max-width: 90%;
+            }
+
+            .chat-form {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .send-btn {
+                align-self: stretch;
+            }
+
+            .header-actions {
+                display: none;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <svg class="logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8b5cf6" />
+                            <stop offset="100%" style="stop-color:#06b6d4" />
+                        </linearGradient>
+                    </defs>
+                    <!-- AI Brain -->
+                    <circle cx="24" cy="24" r="20" fill="url(#logoGradient)" opacity="0.2" />
+                    <circle cx="24" cy="24" r="16" fill="none" stroke="url(#logoGradient)" stroke-width="2" />
+
+                    <!-- Neural Network Nodes -->
+                    <circle cx="18" cy="18" r="2" fill="url(#logoGradient)" />
+                    <circle cx="30" cy="18" r="2" fill="url(#logoGradient)" />
+                    <circle cx="24" cy="24" r="2" fill="url(#logoGradient)" />
+                    <circle cx="18" cy="30" r="2" fill="url(#logoGradient)" />
+                    <circle cx="30" cy="30" r="2" fill="url(#logoGradient)" />
+
+                    <!-- Neural Connections -->
+                    <line x1="18" y1="18" x2="24" y2="24" stroke="url(#logoGradient)" stroke-width="1.5"
+                        opacity="0.6" />
+                    <line x1="30" y1="18" x2="24" y2="24" stroke="url(#logoGradient)" stroke-width="1.5"
+                        opacity="0.6" />
+                    <line x1="24" y1="24" x2="18" y2="30" stroke="url(#logoGradient)" stroke-width="1.5"
+                        opacity="0.6" />
+                    <line x1="24" y1="24" x2="30" y2="30" stroke="url(#logoGradient)" stroke-width="1.5"
+                        opacity="0.6" />
+                    <line x1="18" y1="18" x2="30" y2="30" stroke="url(#logoGradient)" stroke-width="1" opacity="0.4" />
+                    <line x1="30" y1="18" x2="18" y2="30" stroke="url(#logoGradient)" stroke-width="1" opacity="0.4" />
+
+                    <!-- OCR Document Icon -->
+                    <rect x="12" y="8" width="8" height="10" rx="1" fill="none" stroke="url(#logoGradient)"
+                        stroke-width="1.5" opacity="0.8" />
+                    <line x1="14" y1="11" x2="18" y2="11" stroke="url(#logoGradient)" stroke-width="1" opacity="0.6" />
+                    <line x1="14" y1="13" x2="18" y2="13" stroke="url(#logoGradient)" stroke-width="1" opacity="0.6" />
+                    <line x1="14" y1="15" x2="16" y2="15" stroke="url(#logoGradient)" stroke-width="1" opacity="0.6" />
+                </svg>
+
+                <div class="brand-text">
+                    <h1 class="brand-title">AI & OCR Studio</h1>
+                    <p class="brand-subtitle">Intelligent Text Processing</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="status-badge" id="statusBadge" style="display: none;">
+                    <div class="status-dot"></div>
+                    <span>Ready</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Panel - OCR Section -->
+            <div class="left-panel">
+                <div class="section">
+                    <div class="glass-card">
+                        <div class="section-header">
+                            <div class="section-label">
+                                <div class="section-icon">📄</div>
+                                Text Extraction
+                            </div>
+                            <button id="copyOcrBtn" class="btn btn-secondary" style="display: none;">
+                                📋 Copy Text
+                            </button>
+                        </div>
+
+                        <div class="ocr-box" id="ocrText">
+                            <div class="loading-state">
+                                <div class="spinner"></div>
+                                <span>Processing image with OCR...</span>
+                            </div>
+                        </div>
+
+                        <div class="stats-grid" id="ocrStats" style="display: none;">
+                            <div class="stat-item">
+                                <div class="stat-value" id="charCount">0</div>
+                                <div class="stat-label">Characters</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="wordCount">0</div>
+                                <div class="stat-label">Words</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="lineCount">0</div>
+                                <div class="stat-label">Lines</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - AI Chat Section -->
+            <div class="right-panel">
+                <div class="section chat-container">
+                    <div class="chat-glass-card">
+                        <div class="chat-header">
+                            <div class="section-header">
+                                <div class="section-label">
+                                    <div class="section-icon">🤖</div>
+                                    AI Assistant
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-area" id="chatHistory">
+                            <div id="initial-ai-response" class="msg ai">
+                                <div class="msg-bubble">
+                                    <div class="loading-state">
+                                        <div class="spinner"></div>
+                                        <span>AI is analyzing your content...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-footer">
+                            <form id="chatForm" class="chat-form" autocomplete="off" style="display: none;">
+                                <div class="input-container">
+                                    <textarea class="chat-input" id="chatInput"
+                                        placeholder="Ask me anything about the extracted text..." required
+                                        rows="1"></textarea>
+                                </div>
+                                <button class="btn send-btn" type="submit">
+                                    <span>Send</span>
+                                    <span>🚀</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const ocrBox = document.getElementById('ocrText');
+        const ocrStats = document.getElementById('ocrStats');
+        const copyOcrBtn = document.getElementById('copyOcrBtn');
+        const chatHistory = document.getElementById('chatHistory');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const initialAiResponseContainer = document.getElementById('initial-ai-response');
+        const statusBadge = document.getElementById('statusBadge');
+
+        let conversation = [];
+        let fullOcrText = '';
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        // Handle Enter key in textarea
+        chatInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        function updateStats(text) {
+            const charCount = text.length;
+            const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+            const lineCount = text.split('\n').length;
+
+            document.getElementById('charCount').textContent = charCount.toLocaleString();
+            document.getElementById('wordCount').textContent = wordCount.toLocaleString();
+            document.getElementById('lineCount').textContent = lineCount.toLocaleString();
+        }
+
+        function createCodeCopyButton(codeText) {
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'code-copy-btn';
+            copyBtn.textContent = '📋 Copy';
+
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(codeText);
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = '✅ Copied!';
+                    copyBtn.classList.add('copied');
+
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                } catch (error) {
+                    console.error('Failed to copy code:', error);
+                }
+            });
+
+            return copyBtn;
+        }
+
+        ipcRenderer.on('ocr-ready', (event, { ocrText }) => {
+            fullOcrText = ocrText;
+            ocrBox.innerHTML = '';
+            ocrBox.textContent = ocrText;
+            ocrBox.classList.add('has-content');
+            copyOcrBtn.style.display = 'flex';
+            ocrStats.style.display = 'grid';
+            statusBadge.style.display = 'flex';
+
+            updateStats(ocrText);
+        });
+
+        ipcRenderer.on('ai-ready', (event, { aiText, ocrText }) => {
+            initialAiResponseContainer.innerHTML = '';
+            appendMsg('ai', aiText, initialAiResponseContainer);
+            chatForm.style.display = 'flex';
+            chatInput.focus();
+
+            conversation = [
+                { role: "system", content: `You are an expert assistant. CRITICAL RULE: You MUST wrap any and all code blocks in markdown triple backticks (e.g., \`\`\`python ... \`\`\`). Do not write any code outside of these backticks. Use this text as context: """${ocrText}"""` },
+                { role: "assistant", content: aiText }
+            ];
+        });
+
+        function appendMsg(who, txt, parentElement = chatHistory) {
+            const msgContainer = document.createElement('div');
+            msgContainer.className = 'msg ' + who;
+
+            const bubble = document.createElement('div');
+            bubble.className = 'msg-bubble';
+
+            if (who === 'user') {
+                bubble.textContent = txt;
+            } else {
+                // This is the corrected line
+                const parts = txt.split('```');
+
+                parts.forEach((part, index) => {
+                    // This handles empty strings that can result from splitting
+                    if (!part.trim()) return;
+
+                    // Check if the part is inside backticks (i.e., it's code)
+                    const isCode = index % 2 === 1;
+
+                    if (isCode) {
+                        const codeContainer = document.createElement('div');
+                        codeContainer.className = 'code-container';
+
+                        const codeNode = document.createElement('pre');
+                        codeNode.className = 'msg-code';
+
+                        // This regex removes the language hint (e.g., "javascript") from the start of the code block
+                        const codeContent = part.replace(/^\w+\n/, '');
+                        const cleanCode = codeContent.trim();
+                        codeNode.textContent = cleanCode;
+
+                        const copyBtn = createCodeCopyButton(cleanCode);
+
+                        codeContainer.appendChild(codeNode);
+                        codeContainer.appendChild(copyBtn);
+                        bubble.appendChild(codeContainer);
+                    } else {
+                        const textNode = document.createElement('div');
+                        textNode.className = 'msg-text';
+                        // This regex finds **bolded** text and converts it to <strong> HTML tags
+                        textNode.innerHTML = part.trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                        bubble.appendChild(textNode);
+                    }
+                });
+            }
+
+
+            msgContainer.appendChild(bubble);
+            parentElement.appendChild(msgContainer);
+
+            // Scroll to bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userText = chatInput.value.trim();
+            if (!userText) return;
+
+            appendMsg('user', userText);
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+
+            // Add loading message
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'msg ai';
+            loadingMsg.innerHTML = `
+                <div class="msg-bubble">
+                    <div class="loading-state">
+                        <div class="spinner"></div>
+                        <span>Thinking...</span>
+                    </div>
+                </div>
+            `;
+            chatHistory.appendChild(loadingMsg);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            conversation.push({ role: 'user', content: userText });
+
+            try {
+                const aiReply = await ipcRenderer.invoke('chat-with-llm', conversation);
+                chatHistory.removeChild(loadingMsg);
+                appendMsg('ai', aiReply);
+                conversation.push({ role: 'assistant', content: aiReply });
+            } catch (error) {
+                chatHistory.removeChild(loadingMsg);
+                appendMsg('ai', 'Sorry, I encountered an error. Please try again.');
+            }
+        });
+
+        copyOcrBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(fullOcrText);
+                const originalText = copyOcrBtn.innerHTML;
+                copyOcrBtn.innerHTML = "✅ Copied!";
+                copyOcrBtn.classList.add('copy-success');
+
+                setTimeout(() => {
+                    copyOcrBtn.innerHTML = originalText;
+                    copyOcrBtn.classList.remove('copy-success');
+                }, 2000);
+            } catch (error) {
+                console.error('Failed to copy text:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

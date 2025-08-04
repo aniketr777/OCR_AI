@@ -1,0 +1,39 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "AI & OCR Studio is a powerful desktop application designed to streamline your workflow by bridging the gap between images and intelligent analysis. Simply provide an image, and our advanced OCR engine will instantly extract every word with high accuracy.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "keywords": [],
+  "author": "Aniket",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.8.2",
+    "@electron-forge/maker-deb": "^7.8.2",
+    "@electron-forge/maker-rpm": "^7.8.2",
+    "@electron-forge/maker-squirrel": "^7.8.2",
+    "@electron-forge/maker-zip": "^7.8.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.8.2",
+    "@electron-forge/plugin-fuses": "^7.8.2",
+    "@electron-forge/publisher-github": "^7.8.2",
+    "@electron/fuses": "^1.8.0",
+    "electron": "^37.2.5"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "electron-squirrel-startup": "^1.0.1",
+    "groq-sdk": "^0.29.0",
+    "node-fetch": "^3.3.2",
+    "ocr-space-api-wrapper": "^2.4.1",
+    "screenshot-desktop": "^1.15.1",
+    "sharp": "^0.34.3",
+    "tesseract.js": "^6.0.1",
+    "typed.js": "^2.1.0"
+  }
+}
