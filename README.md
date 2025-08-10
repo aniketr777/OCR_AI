@@ -20,3 +20,37 @@ An Electron-based desktop application that allows you to **capture a region of y
 ```bash
 git clone https://github.com/aniketr777/OCR_AI.git
 cd OCR_AI
+2️⃣ Install dependencies
+bash
+Copy
+Edit
+npm install
+3️⃣ Set up environment variables
+Create a .env file in the project root with the following content:
+
+env
+Copy
+Edit
+GROQ_API_KEY=your-groq-api-key
+OCR_API_KEY=your-ocr-space-api-key Run the App
+bash
+Copy
+Edit
+npm start
+🎯 Usage
+From Tray Menu: Click the app’s tray icon → Select "Take Screenshot"
+
+Using Shortcut: Press Ctrl + Shift + S (Windows/Linux) or Cmd + Shift + S (macOS)
+
+Result Window: Shows OCR text and AI-enhanced output
+
+🛠 Tech Stack
+Electron – Cross-platform desktop app framework
+
+Node.js – Backend logic
+
+JavaScript (ES6) – Main code
+
+OCR.Space API – Text recognition from images
+
+Groq API – AI-powered text processing
