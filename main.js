@@ -5,19 +5,27 @@ const {
   globalShortcut,
   ipcMain,
   desktopCapturer,
+  Tray,
+  Menu,
 } = require("electron");
 const fs = require("fs");
 const path = require("path");
 const { ocrSpace } = require("ocr-space-api-wrapper");
 const Groq = require("groq-sdk");
 
+// Load environment variables
 require("dotenv").config();
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+// Initialize Groq client with env key
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 let overlayWin = null;
 let resultWin = null;
+let tray = null;
 
+// --- Window Creation Functions ---
 function createResultPopup() {
   if (resultWin) {
     resultWin.focus();
@@ -60,13 +68,39 @@ function createOverlay() {
   });
 }
 
+// --- App Lifecycle ---
 app.whenReady().then(() => {
+  tray = new Tray(path.join(__dirname, "icon.png"));
+  const contextMenu = Menu.buildFromTemplate([
+    { label: "Take Screenshot", click: createOverlay },
+    { type: "separator" },
+    {
+      label: "Quit",
+      click: () => {
+        app.isQuitting = true;
+        app.quit();
+      },
+    },
+  ]);
+  tray.setToolTip("OCR & AI Screenshot Tool");
+  tray.setContextMenu(contextMenu);
+
   globalShortcut.register("CommandOrControl+Shift+S", createOverlay);
 });
 
+app.on("window-all-closed", () => {
+  // Keep running in background
+});
+
+app.on("activate", () => {
+  if (resultWin) resultWin.focus();
+});
+
+// --- IPC Handlers ---
 ipcMain.handle("capture-region", async (evt, rect) => {
   if (overlayWin) overlayWin.hide();
-  createResultPopup();
+
+  await new Promise((resolve) => setTimeout(resolve, 300));
 
   const display = screen.getPrimaryDisplay();
   const sources = await desktopCapturer.getSources({
@@ -95,10 +129,12 @@ ipcMain.handle("capture-region", async (evt, rect) => {
 
   const cropped = img.crop(cropRect);
   const pngBuffer = cropped.toPNG();
-  const savePath = path.join(
-    app.getPath("userData"),
-    `screenshot_${Date.now()}.png`
-  );
+
+  createResultPopup();
+
+  // Save temp screenshot
+  const tempDir = app.getPath("temp");
+  const savePath = path.join(tempDir, `screenshot_${Date.now()}.png`);
   fs.writeFileSync(savePath, pngBuffer);
 
   let ocrText = "";
@@ -106,10 +142,29 @@ ipcMain.handle("capture-region", async (evt, rect) => {
     const result = await ocrSpace(savePath, {
       apiKey: process.env.OCR_API_KEY,
       language: "eng",
+      OCREngine: 2,
+      scale: true,
+      isOverlayRequired: true,
     });
-    ocrText =
-      (result.ParsedResults && result.ParsedResults[0]?.ParsedText) ||
-      "(No text detected)";
+
+    const parsedResult = result.ParsedResults && result.ParsedResults[0];
+    if (
+      parsedResult &&
+      parsedResult.Overlay &&
+      parsedResult.Overlay.Lines.length > 0
+    ) {
+      const lines = parsedResult.Overlay.Lines;
+      lines.sort((a, b) => a.MinTop - b.MinTop);
+
+      const processedLines = lines.map((line) => {
+        line.Words.sort((a, b) => a.Left - b.Left);
+        return line.Words.map((word) => word.WordText).join(" ");
+      });
+
+      ocrText = processedLines.join("\n");
+    } else {
+      ocrText = parsedResult?.ParsedText || "(No text detected)";
+    }
   } catch (e) {
     ocrText = `OCR Error: ${e.message}`;
   }
@@ -126,7 +181,7 @@ ipcMain.handle("capture-region", async (evt, rect) => {
           {
             role: "system",
             content:
-              "You are an expert assistant.and also give short response as per user need . CRITICAL RULE: You MUST wrap any and all code blocks in markdown triple backticks (e.g., ``````) and give best code . Do not write any code outside of these backticks.",
+              "You are an expert assistant. CRITICAL RULE: Wrap code in triple backticks.",
           },
           { role: "user", content: ocrText },
         ],
@@ -135,7 +190,6 @@ ipcMain.handle("capture-region", async (evt, rect) => {
       aiText =
         chatCompletion.choices[0]?.message?.content ||
         "(AI did not provide a response)";
-      console.log("--- RAW AI RESPONSE ---", aiText);
     } catch (e) {
       aiText = `AI Error: ${e.message}`;
     }
@@ -145,7 +199,13 @@ ipcMain.handle("capture-region", async (evt, rect) => {
     resultWin.webContents.send("ai-ready", { aiText, ocrText });
   }
 
-  fs.unlinkSync(savePath);
+  // Delete temp file
+  try {
+    fs.unlinkSync(savePath);
+  } catch (e) {
+    console.error("Failed to delete screenshot:", e);
+  }
+
   if (overlayWin) overlayWin.close();
 });
 
